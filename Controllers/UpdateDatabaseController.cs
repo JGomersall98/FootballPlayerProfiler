@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MatchMasterWebAPI.ControllerServices;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatchMasterWebAPI.Controllers
@@ -11,9 +12,8 @@ namespace MatchMasterWebAPI.Controllers
 		public IActionResult Get()
 		{
 			//TODO: Add code to update the database
-
-
-
+			UpdateDatabaseControllerService updateDatabaseControllerService = new UpdateDatabaseControllerService();
+			updateDatabaseControllerService.UpdateDatabase();
 
 			return Ok();
 		}
