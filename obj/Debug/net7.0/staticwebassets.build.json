@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "hRfQoaJInNk91RcimVQH+lurez6UxJ/bQZkPzkUA0XE=",
+  "Hash": "Cu6OwuMqZ5vHL01+k2NlKBtCKwPnpfel++ZcaQN/F/0=",
   "Source": "MatchMasterWebAPI",
   "BasePath": "_content/MatchMasterWebAPI",
   "Mode": "Default",
@@ -16,40 +16,6 @@
     }
   ],
   "Assets": [
-    {
-      "Identity": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\Debug\\net7.0\\scopedcss\\bundle\\MatchMasterWebAPI.styles.css",
-      "SourceId": "MatchMasterWebAPI",
-      "SourceType": "Computed",
-      "ContentRoot": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\Debug\\net7.0\\scopedcss\\bundle\\",
-      "BasePath": "_content/MatchMasterWebAPI",
-      "RelativePath": "MatchMasterWebAPI.styles.css",
-      "AssetKind": "All",
-      "AssetMode": "CurrentProject",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ApplicationBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\Debug\\net7.0\\scopedcss\\bundle\\MatchMasterWebAPI.styles.css"
-    },
-    {
-      "Identity": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\MatchMasterWebAPI.bundle.scp.css",
-      "SourceId": "MatchMasterWebAPI",
-      "SourceType": "Computed",
-      "ContentRoot": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\",
-      "BasePath": "_content/MatchMasterWebAPI",
-      "RelativePath": "MatchMasterWebAPI.bundle.scp.css",
-      "AssetKind": "All",
-      "AssetMode": "Reference",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ProjectBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\MatchMasterWebAPI.bundle.scp.css"
-    },
     {
       "Identity": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\wwwroot\\css\\site.css",
       "SourceId": "MatchMasterWebAPI",

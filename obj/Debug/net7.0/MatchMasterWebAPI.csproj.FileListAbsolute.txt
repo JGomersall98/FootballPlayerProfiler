@@ -64,8 +64,6 @@ D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWe
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWebAPI.AssemblyInfo.cs
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWebAPI.csproj.CoreCompileInputs.cache
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWebAPI.MvcApplicationPartsAssemblyInfo.cache
-D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWebAPI.RazorAssemblyInfo.cache
-D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWebAPI.RazorAssemblyInfo.cs
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\staticwebassets\msbuild.MatchMasterWebAPI.Microsoft.AspNetCore.StaticWebAssets.props
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\staticwebassets\msbuild.build.MatchMasterWebAPI.props
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.MatchMasterWebAPI.props
@@ -73,9 +71,7 @@ D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\staticwebasse
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\staticwebassets.pack.json
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\staticwebassets.build.json
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\staticwebassets.development.json
-D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\scopedcss\bundle\MatchMasterWebAPI.styles.css
-D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\scopedcss\projectbundle\MatchMasterWebAPI.bundle.scp.css
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWebAPI.csproj.CopyComplete
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWebAPI.dll
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\refint\MatchMasterWebAPI.dll

@@ -1,10 +1,6 @@
 {
   "Files": [
     {
-      "Id": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\MatchMasterWebAPI.bundle.scp.css",
-      "PackagePath": "staticwebassets\\MatchMasterWebAPI.bundle.scp.css"
-    },
-    {
       "Id": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
