@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\HDD\\DissertationBackend\\temperatureVariationAnalysis\\temperatureVariationAnalysis.csproj": {}
+    "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\temperatureVariationAnalysis.csproj": {}
   },
   "projects": {
-    "D:\\HDD\\DissertationBackend\\temperatureVariationAnalysis\\temperatureVariationAnalysis.csproj": {
+    "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\temperatureVariationAnalysis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\HDD\\DissertationBackend\\temperatureVariationAnalysis\\temperatureVariationAnalysis.csproj",
+        "projectUniqueName": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\temperatureVariationAnalysis.csproj",
         "projectName": "temperatureVariationAnalysis",
-        "projectPath": "D:\\HDD\\DissertationBackend\\temperatureVariationAnalysis\\temperatureVariationAnalysis.csproj",
+        "projectPath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\temperatureVariationAnalysis.csproj",
         "packagesPath": "C:\\Users\\Jack\\.nuget\\packages\\",
-        "outputPath": "D:\\HDD\\DissertationBackend\\temperatureVariationAnalysis\\obj\\",
+        "outputPath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -45,6 +45,16 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.4.4, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
