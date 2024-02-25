@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\HDD\\DissertationBackend\\MatchMasterWEB\\MatchMasterWEB.csproj": {}
+    "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWEB.csproj": {}
   },
   "projects": {
-    "D:\\HDD\\DissertationBackend\\MatchMasterWEB\\MatchMasterWEB.csproj": {
+    "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWEB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\HDD\\DissertationBackend\\MatchMasterWEB\\MatchMasterWEB.csproj",
+        "projectUniqueName": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWEB.csproj",
         "projectName": "MatchMasterWEB",
-        "projectPath": "D:\\HDD\\DissertationBackend\\MatchMasterWEB\\MatchMasterWEB.csproj",
+        "projectPath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWEB.csproj",
         "packagesPath": "C:\\Users\\Jack\\.nuget\\packages\\",
-        "outputPath": "D:\\HDD\\DissertationBackend\\MatchMasterWEB\\obj\\",
+        "outputPath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -59,6 +59,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.8, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

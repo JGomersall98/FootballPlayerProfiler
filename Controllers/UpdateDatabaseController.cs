@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MatchMasterWebAPI.Controllers
 {
-	[Route("api/v1/test")]
 	[ApiController]
+	[Route("api/v1/updatedatabase")]
 	public class UpdateDatabaseController : ControllerBase
 	{
 		[HttpPost]
@@ -14,8 +14,8 @@ namespace MatchMasterWebAPI.Controllers
 			//TODO: Add code to update the database
 			UpdateDatabaseControllerService updateDatabaseControllerService = new UpdateDatabaseControllerService();
 			updateDatabaseControllerService.UpdateDatabase();
-
-			return Ok();
+			string message = "Database updated successfully";
+			return Ok(message);
 		}
 	}
 }

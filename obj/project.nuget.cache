@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UoSn2nI/2/cCYd08q+wij8pvwtZNjEMKa9hCFewJ4120Yc2eEXxn7ggXEBhzTUJ1kkn0lh97S9AbUAYX+wfh9w==",
+  "dgSpecHash": "wmWSDIqU2JLw8+qpPhAyq/lBDLP4nuIZ3AuUsNQVDzz0gtCYbLL1Z8UelhEOGiitU2AJda4HFFR4s7/0dLt14A==",
   "success": true,
-  "projectFilePath": "D:\\HDD\\DissertationBackend\\MatchMasterWEB\\MatchMasterWEB.csproj",
+  "projectFilePath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWEB.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jack\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.7\\microsoft.aspnetcore.openapi.7.0.7.nupkg.sha512",
@@ -25,6 +25,8 @@
     "C:\\Users\\Jack\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\Jack\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
+    "C:\\Users\\Jack\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",

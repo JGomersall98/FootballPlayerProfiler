@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MatchMasterWEB.Controllers
 {
-	[ApiController]
+	
 	[Route("[controller]")]
 	public class WeatherForecastController : ControllerBase
 	{
