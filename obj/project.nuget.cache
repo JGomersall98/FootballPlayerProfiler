@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wzw+fNmqXHhfwYaRxGFYuFy8Ko5zMvi4eXNiUojioQG59mCdH7LP0Z6qYjyz/zuLTIOQtt0AWtMI86LaJJ4I2Q==",
+  "dgSpecHash": "TuFhmSjeVcygFetw90Spey/riVlqpDxSpxWifC5zG9AXzHW6sM6hpRBoHGqVXdp57FmGlOHK0R/5ZFtIjycLuQ==",
   "success": true,
-  "projectFilePath": "D:\\HDD\\DissertationBackend\\MatchMasterWebAPI\\MatchMasterWebAPI.csproj",
+  "projectFilePath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jack\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.10\\microsoft.entityframeworkcore.7.0.10.nupkg.sha512",
