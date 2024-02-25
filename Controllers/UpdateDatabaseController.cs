@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MatchMasterWebAPI.Controllers
 {
-	[Route("api/v1/[controller]")]
+	[Route("api/v1/updatedatabase")]
 	[ApiController]
 	public class UpdateDatabaseController : ControllerBase
 	{
