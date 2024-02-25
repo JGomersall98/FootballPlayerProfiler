@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\HDD\\DissertationBackend\\MatchMasterWebAPI\\MatchMasterWebAPI.csproj": {}
+    "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWebAPI.csproj": {}
   },
   "projects": {
-    "D:\\HDD\\DissertationBackend\\MatchMasterWebAPI\\MatchMasterWebAPI.csproj": {
+    "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\HDD\\DissertationBackend\\MatchMasterWebAPI\\MatchMasterWebAPI.csproj",
+        "projectUniqueName": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWebAPI.csproj",
         "projectName": "MatchMasterWebAPI",
-        "projectPath": "D:\\HDD\\DissertationBackend\\MatchMasterWebAPI\\MatchMasterWebAPI.csproj",
+        "projectPath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWebAPI.csproj",
         "packagesPath": "C:\\Users\\Jack\\.nuget\\packages\\",
-        "outputPath": "D:\\HDD\\DissertationBackend\\MatchMasterWebAPI\\obj\\",
+        "outputPath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
