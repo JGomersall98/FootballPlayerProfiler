@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using temperatureVariationAnalysis.Database;
+using MatchMasterWEB.Database;
+using MatchMasterWebAPI.ControllerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,9 @@ IConfiguration configuration = builder.Configuration;
 builder.Services.AddDbContext<MatchMasterMySqlDatabaseContext>
 	(options => options.UseMySql(configuration.GetConnectionString("MySQLConnection"),
 	ServerVersion.Parse("8.0.25-mysql")));
+
+// Register the endpoint services
+builder.Services.AddScoped<UpdateDatabaseControllerService>();
 
 var app = builder.Build();
 

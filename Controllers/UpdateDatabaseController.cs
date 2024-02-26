@@ -1,6 +1,8 @@
-﻿using MatchMasterWebAPI.ControllerServices;
+﻿using MatchMasterWEB.Database;
+using MatchMasterWebAPI.ControllerServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MatchMasterWebAPI.Controllers
 {
@@ -8,14 +10,25 @@ namespace MatchMasterWebAPI.Controllers
 	[Route("api/v1/updatedatabase")]
 	public class UpdateDatabaseController : ControllerBase
 	{
-		[HttpPost]
-		public IActionResult Get()
+		// Create a private readonly MatchMasterMySqlDatabaseContext
+		private readonly MatchMasterMySqlDatabaseContext _dbContext;
+		// Create a constructor for the UpdateDatabaseController
+		public UpdateDatabaseController(MatchMasterMySqlDatabaseContext dbContext)
 		{
-			//TODO: Add code to update the database
+			_dbContext = dbContext;
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Get()
+		{
+			// Create an instance of the UpdateDatabaseControllerService
 			UpdateDatabaseControllerService updateDatabaseControllerService = new UpdateDatabaseControllerService();
-			updateDatabaseControllerService.UpdateDatabase();
-			string message = "Database updated successfully";
-			return Ok(message);
+
+			// Pass the database context to the UpdateDatabaseAsync method
+			string result = await updateDatabaseControllerService.UpdateDatabaseAsync(_dbContext);
+
+			// Return the result
+			return Ok(result);
 		}
 	}
 }

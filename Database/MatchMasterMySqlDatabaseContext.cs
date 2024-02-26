@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using temperatureVariationAnalysis.Database.DB_Models;
+﻿using MatchMasterWEB.Database.DB_Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace temperatureVariationAnalysis.Database
+namespace MatchMasterWEB.Database
 {
 	public class MatchMasterMySqlDatabaseContext : DbContext
 	{
