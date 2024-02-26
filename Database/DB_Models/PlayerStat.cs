@@ -1,4 +1,4 @@
-﻿namespace temperatureVariationAnalysis.Database.DB_Models
+﻿namespace MatchMasterWEB.Database.DB_Models
 {
 	public class PlayerStat
 	{
