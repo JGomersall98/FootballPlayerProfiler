@@ -10,7 +10,9 @@ namespace MatchMasterWebAPI.Controllers
 	[Route("api/v1/updatedatabase")]
 	public class UpdateDatabaseController : ControllerBase
 	{
+		// Create a private readonly MatchMasterMySqlDatabaseContext
 		private readonly MatchMasterMySqlDatabaseContext _dbContext;
+		// Create a constructor for the UpdateDatabaseController
 		public UpdateDatabaseController(MatchMasterMySqlDatabaseContext dbContext)
 		{
 			_dbContext = dbContext;
@@ -19,10 +21,13 @@ namespace MatchMasterWebAPI.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Get()
 		{
-			//TODO: Add code to update the database
+			// Create an instance of the UpdateDatabaseControllerService
 			UpdateDatabaseControllerService updateDatabaseControllerService = new UpdateDatabaseControllerService();
+
+			// Pass the database context to the UpdateDatabaseAsync method
 			string result = await updateDatabaseControllerService.UpdateDatabaseAsync(_dbContext);
 
+			// Return the result
 			return Ok(result);
 		}
 	}
