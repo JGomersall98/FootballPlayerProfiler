@@ -12,7 +12,7 @@ namespace MatchMasterWebAPI.ControllerServices
 			// Deserialize the response
 			var fixturesByLeagueIdObject = JsonConvert.DeserializeObject<FixturesByLeagueIdObject.FixtureResponse>(fixtureIdResponse);
 			// Get List of Fixtures and DateTimes
-			FixtureDetails fixtureDetails = GetFixtureDetails(fixturesByLeagueIdObject); 
+			FixtureDetails fixtureDetails = GetFixtureDetails(fixturesByLeagueIdObject);
             // Get the temperature for each fixture
 
             // TODO: Add code to get the temperature for each fixture
