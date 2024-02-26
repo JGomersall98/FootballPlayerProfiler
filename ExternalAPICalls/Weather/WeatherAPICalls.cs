@@ -64,6 +64,7 @@ namespace MatchMasterWEB.ExternalAPICalls.Weather
 
 			return temperature;
 		}
+
 		public class WeatherApiResponse
 		{
 			public List<WeatherData>? Data { get; set; }

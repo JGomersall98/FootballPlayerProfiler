@@ -6,6 +6,8 @@ namespace MatchMasterWEB.ExternalAPICalls.PerformanceMetrics
 {
 	public class FootballAPICalls
 	{
+		private const string RapidAPIKey = "bdc8d9557cmshf0bec4adac0297bp142c9djsn35ff23a72fb7";
+		private const string RapidAPIHost = "api-football-v1.p.rapidapi.com";
 		public async Task<FixtureResponse> GetFixtureIdAsync()
 		{
 
@@ -15,10 +17,10 @@ namespace MatchMasterWEB.ExternalAPICalls.PerformanceMetrics
 				Method = HttpMethod.Get,
 				RequestUri = new Uri("https://api-football-v1.p.rapidapi.com/v3/fixtures?league=40&season=2023&team=64&status=FT"),
 				Headers =
-					{
-						{ "X-RapidAPI-Key", "bdc8d9557cmshf0bec4adac0297bp142c9djsn35ff23a72fb7" },
-						{ "X-RapidAPI-Host", "api-football-v1.p.rapidapi.com" },
-					},
+				{
+					{ "X-RapidAPI-Key", RapidAPIKey },
+					{ "X-RapidAPI-Host", RapidAPIHost },
+				},
 			};
 			using (var response = await client.SendAsync(request))
 			{
@@ -31,6 +33,35 @@ namespace MatchMasterWEB.ExternalAPICalls.PerformanceMetrics
 				return fixturesByLeagueIdObject;
 			}
 			throw new NotImplementedException();
+		}
+		public async Task<string> GetPlayerStatsByFixtureIdAsync(int fixtureId)
+		{
+			var client = new HttpClient();
+			var request = new HttpRequestMessage
+			{
+				Method = HttpMethod.Get,
+				RequestUri = new Uri("https://api-football-v1.p.rapidapi.com/v3/fixtures/players?fixture=" + fixtureId),
+				Headers =
+				{
+					{ "X-RapidAPI-Key", RapidAPIKey },
+					{ "X-RapidAPI-Host", RapidAPIHost },
+				},
+			};
+
+			try
+			{
+				using (var response = await client.SendAsync(request))
+				{
+					response.EnsureSuccessStatusCode();
+					return await response.Content.ReadAsStringAsync();
+				}
+			}
+			catch (HttpRequestException e)
+			{
+				// Log the exception details or return a custom error message
+				Console.WriteLine($"Request failed: {e.Message}");
+				return $"Error: {e.Message}";
+			}
 		}
 		public FixtureDetails GetFixtureDetails(FixturesByLeagueIdObject.FixtureResponse fixturesByLeagueIdObject, List<int> fixtureIds)
 		{
