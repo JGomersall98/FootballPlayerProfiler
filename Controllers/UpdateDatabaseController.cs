@@ -23,11 +23,6 @@ namespace MatchMasterWebAPI.Controllers
 			UpdateDatabaseControllerService updateDatabaseControllerService = new UpdateDatabaseControllerService();
 			string result = await updateDatabaseControllerService.UpdateDatabaseAsync(_dbContext);
 
-			//var message = _dashboardService.UpdateDatabaseAsync();
-
-			//Await UpdateDatabaseAsync
-			//_dashboardService.UpdateDatabaseAsync();
-
 			return Ok(result);
 		}
 	}
