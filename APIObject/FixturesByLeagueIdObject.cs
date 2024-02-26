@@ -18,10 +18,10 @@ namespace MatchMasterWEB.APIObject
 
 		public class Response
 		{
-			public Fixture Fixture { get; set; }
+			public FixtureInfo Fixture { get; set; }
 		}
 
-		public class Fixture
+		public class FixtureInfo
 		{
 			public int Id { get; set; }
 			public DateTime Date { get; set; }

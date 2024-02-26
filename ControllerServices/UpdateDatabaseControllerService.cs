@@ -1,9 +1,11 @@
 ﻿using MatchMasterWEB.APIObject;
 using Newtonsoft.Json;
-using System.Net.Http.Headers;
 using MatchMasterWEB.Database;
-using Microsoft.EntityFrameworkCore;
 using MatchMasterWEB.Database.DB_Models;
+using MatchMasterWEB.ExternalAPICalls.Weather;
+using MatchMasterWEB.ExternalAPICalls.PerformanceMetrics;
+using static MatchMasterWEB.APIObject.FixturesByLeagueIdObject;
+using static MatchMasterWEB.APIObject.FixtureDetails;
 
 namespace MatchMasterWebAPI.ControllerServices
 {
@@ -21,104 +23,65 @@ namespace MatchMasterWebAPI.ControllerServices
 			}
 			else
 			{
-				//			UCOMMENT THE FOLLOWING LINE TO USE THE API
-				string fixtureIdResponse = await GetFixtureIdAsync();
-				//			UNCOMMENT THE ABOVE LINE TO USE THE API
+				FootballAPICalls footballAPICalls = new FootballAPICalls();
+				FixtureResponse fixtureIdResponse = await footballAPICalls.GetFixtureIdAsync();
 
-				// Deserialize the response
-				//			UNCOMMENT THE FOLLOWING LINE WHEN USING THE API
-				var fixturesByLeagueIdObject = JsonConvert.DeserializeObject<FixturesByLeagueIdObject.FixtureResponse>(fixtureIdResponse);
-				//			UNCOMMENT THE ABOVE LINE WHEN USING THE API
-
-				// Get List of FixtureIds from the database
+				// Get List of existing fixtureIds to filter out duplicates
 				List<int> fixtureIds = dbContext.Fixtures.Select(f => f.FixtureId).ToList();
 
-
-				// Get List of Fixtures and DateTimes
-				//			UNCOMMENT THE FOLLOWING LINE WHEN USING THE API
-				FixtureDetails fixtureDetails = GetFixtureDetails(fixturesByLeagueIdObject, fixtureIds);
-				//			UNCOMMENT THE ABOVE LINE WHEN USING THE API
+				// Get the fixture details
+				FixtureDetails fixtureDetails = footballAPICalls.GetFixtureDetails(fixtureIdResponse, fixtureIds);
 			}
-
-			// Get the temperature for each fixture
+			List<string> placeIds = new List<string>();
+			List<double> temperatures = new List<double>();
+			// Get the placeId for each fixture
 			foreach (var fixture in dummyFixtureDetails.fixtureDetails)
 			{
-				string placeId = await GetPlaceIdAPICall(fixture.city[0]);
-				//New Fixture object
+				// Get List of placeIds				
+				placeIds.Add(await GetPlaceIdAsync(fixture));
+				// Get List of Temperatures			
+				temperatures.Add(await GetTemperatureAsync(placeIds[0], DateTime.Parse(fixture.dates[0]), fixture.times[0]));				
+			}
+			int counter = 0;
+			// Add the fixtures to the database
+			foreach (var fixture in dummyFixtureDetails.fixtureDetails)
+			{
+				
+				// Add the fixture to the database
 				Fixture newFixture = new Fixture
 				{
 					FixtureId = int.Parse(fixture.fixtureIds[0]),
+					PlaceId = placeIds[counter],
 					Date = DateTime.Parse(fixture.dates[0]),
 					Time = TimeSpan.Parse(fixture.times[0]),
-					PlaceId = placeId
-				};	
-				fixtures.Add(newFixture);
+					Temperature = temperatures[counter]
+				};
+				dbContext.Fixtures.Add(newFixture);
+				counter++;
 			}
-            await Console.Out.WriteLineAsync(	);
-            // TODO: Add code to get the temperature for each fixture
-
+			// Save the changes to the database
+			await dbContext.SaveChangesAsync();
 
             return "Success";
 
         }
-
-		public FixtureDetails GetFixtureDetails(FixturesByLeagueIdObject.FixtureResponse fixturesByLeagueIdObject, List<int> fixtureIds)
+		public async Task<string> GetPlaceIdAsync(Fixtures fixture)
 		{
-			if (fixturesByLeagueIdObject?.Response == null)
-				throw new ArgumentNullException(nameof(fixturesByLeagueIdObject));
+			WeatherAPICalls weatherAPICall = new WeatherAPICalls();
+			string placeId = await weatherAPICall.GetPlaceIdAPICall(fixture.city[0]);
+			if (placeId == "" || placeId == null)
+				placeId = "sheffield";
+			
+			//Thread.Sleep(1000);
 
-			var fixtureDetailsList = new List<FixtureDetails.Fixtures>();
-
-			foreach (var fixture in fixturesByLeagueIdObject.Response)
-			{
-				var fixtureDetail = new FixtureDetails.Fixtures
-				{
-					fixtureIds = new List<string> { fixture.Fixture.Id.ToString() },
-					dates = new List<string> { fixture.Fixture.Date.ToString("yyyy-MM-dd") },
-					times = new List<string> { fixture.Fixture.Date.ToString("HH:mm:ss") },
-					city = new List<string> { fixture.Fixture.Venue.City }
-				};
-
-				fixtureDetailsList.Add(fixtureDetail);
-			}
-			//Filter the fixtureDetails to only include fixtures that are not in the database
-			FixtureDetails filteredFixtureDetails = FilterFixtureDetails(new FixtureDetails { fixtureDetails = fixtureDetailsList }, fixtureIds);
-
-			//Return filteredFixtureDetails
-			return filteredFixtureDetails;
+			return placeId;
 		}
-		public FixtureDetails FilterFixtureDetails(FixtureDetails fixtureDetails, List<int> fixtureIds)
+		public async Task<double> GetTemperatureAsync(string placeId, DateTime date, string time)
 		{
-			if (fixtureDetails?.fixtureDetails == null)
-				throw new ArgumentNullException(nameof(fixtureDetails));
-
-			//Filter the fixtureDetails to only include fixtures that are not in the database
-			fixtureDetails.fixtureDetails = fixtureDetails.fixtureDetails.Where(f => !fixtureIds.Contains(int.Parse(f.fixtureIds[0]))).ToList();
-
-			return fixtureDetails;
-		}
-		private async Task<string> GetFixtureIdAsync()
-		{
-
-			var client = new HttpClient();
-			var request = new HttpRequestMessage
-			{
-				Method = HttpMethod.Get,
-				RequestUri = new Uri("https://api-football-v1.p.rapidapi.com/v3/fixtures?league=40&season=2023&team=64&status=FT"),
-				Headers =
-					{
-						{ "X-RapidAPI-Key", "bdc8d9557cmshf0bec4adac0297bp142c9djsn35ff23a72fb7" },
-						{ "X-RapidAPI-Host", "api-football-v1.p.rapidapi.com" },
-					},
-			};
-			using (var response = await client.SendAsync(request))
-			{
-				response.EnsureSuccessStatusCode();
-				string body = await response.Content.ReadAsStringAsync();
-				Console.WriteLine(body);
-				return body;
-			}
-			throw new NotImplementedException();
+			WeatherAPICalls weatherAPICall = new WeatherAPICalls();
+			double temperature = await weatherAPICall.GetTemperatureAsync(placeId, date, time);
+			//Thread.Sleep(1000);
+			return temperature;
 		}
 		private FixtureDetails GetDummyData()
 		{
@@ -129,32 +92,46 @@ namespace MatchMasterWebAPI.ControllerServices
 			return fixtureDetails;
 
 		}
-		private async Task<string> GetPlaceIdAPICall(string cityName)
+		public static List<Fixture> GetFixtures()
 		{
-			var client = new HttpClient();
-			var request = new HttpRequestMessage
+			return new List<Fixture>
 			{
-				Method = HttpMethod.Get,
-				// Use string interpolation to dynamically insert the city name
-				RequestUri = new Uri($"https://ai-weather-by-meteosource.p.rapidapi.com/find_places?text={Uri.EscapeDataString(cityName)}&language=en"),
-				Headers =
-				{
-					{ "X-RapidAPI-Key", "your_rapidapi_key_here" },
-					{ "X-RapidAPI-Host", "ai-weather-by-meteosource.p.rapidapi.com" },
-				},
+			new Fixture { FixtureId = 1047438, PlaceId = "norwich", Date = DateTime.Parse("2023-08-05"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047450, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-08-12"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047460, PlaceId = "sheffield", Date = DateTime.Parse("2023-08-19"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047470, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-08-25"), Time = TimeSpan.Parse("19:30:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047486, PlaceId = "leicestershire", Date = DateTime.Parse("2023-09-02"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047494, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-09-15"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047514, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-09-20"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047526, PlaceId = "basford-stokeontrent", Date = DateTime.Parse("2023-09-24"), Time = TimeSpan.Parse("12:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047534, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-09-30"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047543, PlaceId = "ipswich", Date = DateTime.Parse("2023-10-03"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047559, PlaceId = "london", Date = DateTime.Parse("2023-10-07"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047568, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-10-21"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047583, PlaceId = "birmingham", Date = DateTime.Parse("2023-10-25"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047593, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-10-28"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047612, PlaceId = "west-bromwich", Date = DateTime.Parse("2023-11-04"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047616, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-11-11"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047635, PlaceId = "swansea", Date = DateTime.Parse("2023-11-25"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047639, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-11-28"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047650, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-12-02"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047668, PlaceId = "london", Date = DateTime.Parse("2023-12-09"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047682, PlaceId = "middlesbrough", Date = DateTime.Parse("2023-12-13"), Time = TimeSpan.Parse("20:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047687, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-12-16"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047697, PlaceId = "bristol", Date = DateTime.Parse("2023-12-22"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047714, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-12-26"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047725, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2023-12-29"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047741, PlaceId = "sheffield", Date = DateTime.Parse("2024-01-01"), Time = TimeSpan.Parse("17:15:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047750, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2024-01-12"), Time = TimeSpan.Parse("20:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047767, PlaceId = "sunderland", Date = DateTime.Parse("2024-01-19"), Time = TimeSpan.Parse("20:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047778, PlaceId = "southampton-weather-centre", Date = DateTime.Parse("2024-02-20"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047783, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2024-02-03"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047795, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2024-02-10"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047808, PlaceId = "maltby", Date = DateTime.Parse("2024-02-13"), Time = TimeSpan.Parse("19:45:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047818, PlaceId = "sheffield", Date = DateTime.Parse("2024-02-17"), Time = TimeSpan.Parse("15:00:00"), Temperature = 0 },
+			new Fixture { FixtureId = 1047831, PlaceId = "kingston-upon-hull", Date = DateTime.Parse("2024-02-24"), Time = TimeSpan.Parse("12:30:00"), Temperature = 0 }
 			};
+		}
 
-			using (var response = await client.SendAsync(request))
-			{
-				response.EnsureSuccessStatusCode();
-				var body = await response.Content.ReadAsStringAsync();
-				string placeId = GetPlaceId(body);
-				return placeId;
-			}		
-		}
-		private string GetPlaceId(string body)
-		{
-			return "";
-		}
 	}
 }
