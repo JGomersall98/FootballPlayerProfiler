@@ -13,9 +13,9 @@ namespace MatchMasterWebAPI.Controllers
 		{
 			//TODO: Add code to update the database
 			UpdateDatabaseControllerService updateDatabaseControllerService = new UpdateDatabaseControllerService();
-			updateDatabaseControllerService.UpdateDatabase();
-			string message = "Database updated successfully";
-			return Ok(message);
+			updateDatabaseControllerService.UpdateDatabaseAsync();
+
+			return Ok();
 		}
 	}
 }

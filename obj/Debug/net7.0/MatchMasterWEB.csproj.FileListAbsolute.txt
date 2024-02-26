@@ -82,3 +82,4 @@ D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\MatchMasterWE
 D:\HDD\DissertationBackend\FootballPlayerProfiler\obj\Debug\net7.0\ref\MatchMasterWEB.dll
 D:\HDD\DissertationBackend\FootballPlayerProfiler\bin\Debug\net7.0\MySqlConnector.dll
 D:\HDD\DissertationBackend\FootballPlayerProfiler\bin\Debug\net7.0\Pomelo.EntityFrameworkCore.MySql.dll
+D:\HDD\DissertationBackend\FootballPlayerProfiler\bin\Debug\net7.0\Newtonsoft.Json.dll

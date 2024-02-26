@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "wmWSDIqU2JLw8+qpPhAyq/lBDLP4nuIZ3AuUsNQVDzz0gtCYbLL1Z8UelhEOGiitU2AJda4HFFR4s7/0dLt14A==",
+  "dgSpecHash": "ItzCfP8IJlyOy32KBqfx0rT07pmy9mC7OPTHvBV/UtyOptyN9XydJyS7L5kVQtPYagVZdhUrFcp9rnVPMTLWpA==",
   "success": true,
   "projectFilePath": "D:\\HDD\\DissertationBackend\\FootballPlayerProfiler\\MatchMasterWEB.csproj",
   "expectedPackageFiles": [
@@ -26,6 +26,7 @@
     "C:\\Users\\Jack\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
+    "C:\\Users\\Jack\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "C:\\Users\\Jack\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",

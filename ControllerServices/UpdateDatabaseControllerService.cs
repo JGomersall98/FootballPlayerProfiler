@@ -1,16 +1,49 @@
-﻿using System.Net.Http.Headers;
+﻿using MatchMasterWEB.APIObject;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace MatchMasterWebAPI.ControllerServices
 {
 	public class UpdateDatabaseControllerService
 	{
-		public void UpdateDatabase()
+		public async Task UpdateDatabaseAsync()
 		{
-			var fixtureIdResponse = GetFixtureIdAsync();
-			
+			string fixtureIdResponse = await GetFixtureIdAsync();
+			// Deserialize the response
+			var fixturesByLeagueIdObject = JsonConvert.DeserializeObject<FixturesByLeagueIdObject.FixtureResponse>(fixtureIdResponse);
+			// Get List of Fixtures and DateTimes
+			FixtureDetails fixtureDetails = GetFixtureDetails(fixturesByLeagueIdObject); 
+            // Get the temperature for each fixture
+
+            // TODO: Add code to get the temperature for each fixture
+
+
+        }
+
+		public FixtureDetails GetFixtureDetails(FixturesByLeagueIdObject.FixtureResponse fixturesByLeagueIdObject)
+		{
+			if (fixturesByLeagueIdObject?.Response == null)
+				throw new ArgumentNullException(nameof(fixturesByLeagueIdObject));
+
+			var fixtureDetailsList = new List<FixtureDetails.Fixtures>();
+
+			foreach (var fixture in fixturesByLeagueIdObject.Response)
+			{
+				var fixtureDetail = new FixtureDetails.Fixtures
+				{
+					fixtureIds = new List<string> { fixture.Fixture.Id.ToString() },
+					dates = new List<string> { fixture.Fixture.Date.ToString("yyyy-MM-dd") },
+					times = new List<string> { fixture.Fixture.Date.ToString("HH:mm:ss") },
+					city = new List<string> { fixture.Fixture.Venue.City }
+				};
+
+				fixtureDetailsList.Add(fixtureDetail);
+			}
+
+			return new FixtureDetails { fixtureDetails = fixtureDetailsList };
 		}
 
-		private async Task<object> GetFixtureIdAsync()
+		private async Task<string> GetFixtureIdAsync()
 		{
 
 			var client = new HttpClient();
@@ -27,11 +60,12 @@ namespace MatchMasterWebAPI.ControllerServices
 			using (var response = await client.SendAsync(request))
 			{
 				response.EnsureSuccessStatusCode();
-				var body = await response.Content.ReadAsStringAsync();
+				string body = await response.Content.ReadAsStringAsync();
 				Console.WriteLine(body);
 				return body;
 			}
 			throw new NotImplementedException();
 		}
+
 	}
 }
