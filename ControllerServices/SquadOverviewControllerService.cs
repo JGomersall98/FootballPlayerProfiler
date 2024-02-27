@@ -2,90 +2,122 @@
 using MatchMasterWEB.Database.DB_Models;
 using MatchMasterWEB.DTO_Models.SquadOverview;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MatchMasterWEB.ControllerServices
 {
-	public class SquadOverviewControllerService
-	{
-		public DTO_GetSquadOverviewPlayers GetSquadOverview(string position, MatchMasterMySqlDatabaseContext dbContext)
-		{
-			// Get all Players from the database where players.position == position including player stats and fixture
-			Player[] players = dbContext.Players.Include(p => p.PlayerStats).Where(p => p.Position == position).ToArray();
-			
-			// Order Players Array By Amount of PlayerStats
-			System.Array.Sort(players, (y, x) => x.PlayerStats.Count.CompareTo(y.PlayerStats.Count));
-
-			// Create a new DTO_GetSquadOverviewPlayers
-			DTO_GetSquadOverviewPlayers dTO_GetSquadOverviewPlayers = new DTO_GetSquadOverviewPlayers();
-
-			List<DTO_SquadOverviewPlayer> dTO_SquadOverviewPlayerList = new List<DTO_SquadOverviewPlayer>();
-
-			// Build DTO_GetSquadOverviewPlayers
-			foreach (Player player in players)
-			{
-				double playerRating = GetAverageRating(player);
-				if (playerRating != 0)
-				{
-					// Create New DTO_SquadOverviewPlayer
-					DTO_SquadOverviewPlayer dTO_SquadOverviewPlayer = new DTO_SquadOverviewPlayer();
-					{
-						dTO_SquadOverviewPlayer.PlayerId = player.PlayerId;
-						dTO_SquadOverviewPlayer.PlayerName = player.Name;
-						dTO_SquadOverviewPlayer.PlayerPhoto = player.Photo;
-						dTO_SquadOverviewPlayer.PlayerRating = playerRating;
-						dTO_SquadOverviewPlayer.AdaptabilityPercentage = GetAdaptabilityRating(player, dbContext);
-					}
-					// Add DTO_SquadOverviewPlayer to DTO_SquadOverviewPlayerList
-					dTO_SquadOverviewPlayerList.Add(dTO_SquadOverviewPlayer);
-				}
+    public class SquadOverviewControllerService
+    {
+        public DTO_GetSquadOverviewPlayers GetSquadOverview(string position, MatchMasterMySqlDatabaseContext dbContext)
+        {
+            //position to uppercase
+            position = position.ToUpper();
+            // if position is not D,M,F then return error with message
+            if (position != "D" && position != "M" && position != "F")
+            {
+				throw new ArgumentException("Invalid position.");
 			}
-			// Create Array of DTO_SquadOverviewPlayer count of dTO_SquadOverviewPlayerList
-			dTO_GetSquadOverviewPlayers.Players = dTO_SquadOverviewPlayerList.ToArray();
 
-			// Return DTO_GetSquadOverviewPlayers
-			return dTO_GetSquadOverviewPlayers;
-		}
-		public double GetAverageRating(Player player)
-		{
-			// Create a variable to store the total rating
-			double totalRating = 0;
-			// Loop through each player stat not counting if rating is 0
-			foreach (PlayerStat playerStat in player.PlayerStats)
-			{
-				if (playerStat.Rating != 0)
-				{
-					totalRating += playerStat.Rating;
-				}
-			}
-			// Return the average rating rounded to 2 decimal places
-			return System.Math.Round(totalRating / player.PlayerStats.Count, 2);
-		}
-		public int GetAdaptabilityRating(Player player, MatchMasterMySqlDatabaseContext dbContext)
-		{
-			// Create a variable to store the total adaptability
-			int totalAdaptability = 0;
-			double highestTemperatureRating = 0;
-			double lowestTemperatureRating = 0;
-			// Find Fixture That the player has played in with the lowest and highest temperature, find players ratings for each fixtures
-			foreach (PlayerStat playerStat in player.PlayerStats)
-			{
-				Fixture fixture = dbContext.Fixtures.FirstOrDefault(f => f.FixtureId == playerStat.FixtureId);
-				if (fixture != null)
-				{
-					if (fixture.Temperature > highestTemperatureRating)
-					{
-						highestTemperatureRating = fixture.Temperature;
-					}
-					if (fixture.Temperature < lowestTemperatureRating)
-					{
-						lowestTemperatureRating = fixture.Temperature;
-					}
-				}
-			}
-			// Divide lowest temperature by highest temperature and multiply by 100 to get percentage
-			totalAdaptability = (int)System.Math.Round((lowestTemperatureRating / highestTemperatureRating) * 100);
-			// Return the total adaptability
-			return totalAdaptability;
-		}
-	}
+            var players = GetPlayersWithStats(position, dbContext);
+
+            List<DTO_SquadOverviewPlayer> squadOverviewPlayers = players
+                .Select(player => new DTO_SquadOverviewPlayer
+                {
+                    PlayerId = player.PlayerId,
+                    PlayerName = player.Name,
+                    PlayerPhoto = player.Photo,
+                    PlayerRating = GetAverageRating(player, dbContext),
+                    AdaptabilityPercentage = GetAdaptabilityRating(player, dbContext)
+                })
+                .Where(player => player?.PlayerRating?.PlayerRating > 0)
+                .ToList();
+
+            return new DTO_GetSquadOverviewPlayers
+            {
+                Players = squadOverviewPlayers.ToArray()
+            };
+        }
+
+        private IEnumerable<Player> GetPlayersWithStats(string position, MatchMasterMySqlDatabaseContext dbContext)
+        {
+            return dbContext.Players
+                .Include(p => p.PlayerStats)
+                .Where(p => p.Position == position)
+                .OrderByDescending(p => p.PlayerStats.Count)
+                .ToList();
+        }
+
+        private DTO_PlayerRating GetAverageRating(Player player, MatchMasterMySqlDatabaseContext dbContext)
+        {
+            List<double> validRatings = player.PlayerStats
+                .Where(ps => ps.Rating > 0)
+                .Select(ps => ps.Rating)
+                .ToList();
+
+            if (validRatings.Any())
+            {
+                double averageRating = Math.Round(validRatings.Average(), 2);
+                string textColor = GetTextColour(averageRating);
+                return new DTO_PlayerRating { PlayerRating = averageRating, TextColor = textColor };
+            }
+            else
+            {
+                return new DTO_PlayerRating { TextColor = "#808080" };
+            }
+        }
+
+        private DTO_AdaptabilityRating GetAdaptabilityRating(Player player, MatchMasterMySqlDatabaseContext dbContext)
+        {
+            PlayerStat[] playerStats = dbContext.PlayerStats
+                .Include(ps => ps.Fixture)
+                .Where(ps => ps.PlayerId == player.PlayerId)
+                .ToArray();
+
+            int ratedFixtures = playerStats.Count(ps => ps.Rating > 0);
+            if (ratedFixtures < 10)
+            {
+                return new DTO_AdaptabilityRating { TextColor = "#808080" };
+            }
+
+            var highTempFixtures = playerStats.OrderByDescending(ps => ps.Fixture.Temperature).Take(5).Select(ps => ps.Fixture);
+            var lowTempFixtures = playerStats.OrderBy(ps => ps.Fixture.Temperature).Take(5).Select(ps => ps.Fixture);
+
+            double highTempAverageRating = CalculateAverageRating(highTempFixtures, playerStats);
+			double lowTempAverageRating = CalculateAverageRating(lowTempFixtures, playerStats);
+
+			double adaptabilityRating = (lowTempAverageRating < highTempAverageRating ? lowTempAverageRating / highTempAverageRating : highTempAverageRating / lowTempAverageRating) * 100;
+            int adaptabilityRatingInt = (int)adaptabilityRating;
+            string textColour = GetTextColour(adaptabilityRating / 10);
+
+            return new DTO_AdaptabilityRating { AdaptabilityPercentage = adaptabilityRatingInt, TextColor = textColour };
+        }
+
+        private double CalculateAverageRating(IEnumerable<Fixture> fixtures, PlayerStat[] playerStats)
+        {
+			double totalRating = fixtures
+                .Select(fixture => playerStats.FirstOrDefault(ps => ps.FixtureId == fixture.FixtureId)?.Rating)
+                .Where(rating => rating.HasValue && rating.Value > 0)
+                .Sum(rating => rating.Value);
+
+            int count = fixtures
+                .Select(fixture => playerStats.FirstOrDefault(ps => ps.FixtureId == fixture.FixtureId)?.Rating)
+                .Count(rating => rating.HasValue && rating.Value > 0);
+
+            return count > 0 ? totalRating / count : 0;
+        }
+
+        private string GetTextColour(double rating)
+        {
+            return rating switch
+            {
+                < 5 => "#FF0000",
+                >= 5 and < 7 => "#FFA500",
+                >= 7 and < 8 => "#6BBE00",
+                > 8 => "#008000",
+                _ => "#FFA500",
+            };
+        }
+    }
 }
