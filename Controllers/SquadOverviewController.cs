@@ -25,7 +25,7 @@ namespace MatchMasterWEB.Controllers
 			SquadOverviewControllerService squadOverviewControllerService = new SquadOverviewControllerService();
 
 			// Pass the position to the GetSquadOverview method
-			DTO_GetSquadOverviewPlayers dTO_GetSquadOverviewPlayers = squadOverviewControllerService.GetSquadOverview(position);
+			DTO_GetSquadOverviewPlayers dTO_GetSquadOverviewPlayers = squadOverviewControllerService.GetSquadOverview(position, _dbContext);
 
 			// Return the result
 			return Ok(dTO_GetSquadOverviewPlayers);
