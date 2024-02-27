@@ -26,11 +26,11 @@ namespace MatchMasterWebAPI.ControllerServices
 				if (fixtureDetails == null || fixtureDetails.fixtureDetails == null || !fixtureDetails.fixtureDetails.Any())
 					return "No fixture details available.";
 
-				await ProcessFixturesAsync(fixtureDetails, dbContext);
-				await ProcessPlayerStatsAsync(fixtureDetails, dbContext);
+				var addedFixtureIds = await ProcessFixturesAsync(fixtureDetails, dbContext);
+				await ProcessPlayerStatsAsync(fixtureDetails, addedFixtureIds, dbContext);
 
 				await dbContext.SaveChangesAsync();
-				return "Success";
+				return $"Success - Updated Database. Added {addedFixtureIds.Count} fixtures.";
 			}
 			catch (Exception ex)
 			{
@@ -39,8 +39,9 @@ namespace MatchMasterWebAPI.ControllerServices
 			}
 		}
 
-		private async Task ProcessFixturesAsync(FixtureDetails fixtureDetails, MatchMasterMySqlDatabaseContext dbContext)
+		private async Task<List<int>> ProcessFixturesAsync(FixtureDetails fixtureDetails, MatchMasterMySqlDatabaseContext dbContext)
 		{
+			var addedFixtureIds = new List<int>();
 			foreach (var fixture in fixtureDetails.fixtureDetails)
 			{
 				int fixtureId = int.Parse(fixture.fixtureIds[0]);
@@ -49,23 +50,29 @@ namespace MatchMasterWebAPI.ControllerServices
 					string placeId = await GetPlaceIdAsync(fixture);
 					double temperature = await GetTemperatureAsync(placeId, DateTime.Parse(fixture.dates[0]), fixture.times[0]);
 					dbContext.Fixtures.Add(CreateFixture(fixture, placeId, temperature));
+					addedFixtureIds.Add(fixtureId);
 				}
 			}
+			return addedFixtureIds;
 		}
 
-		private async Task ProcessPlayerStatsAsync(FixtureDetails fixtureDetails, MatchMasterMySqlDatabaseContext dbContext)
+		private async Task ProcessPlayerStatsAsync(FixtureDetails fixtureDetails, List<int> addedFixtureIds, MatchMasterMySqlDatabaseContext dbContext)
 		{
 			foreach (var fixture in fixtureDetails.fixtureDetails)
 			{
-				FootballAPICalls footballAPICalls = new FootballAPICalls();
-				string playerStatsJson = await footballAPICalls.GetPlayerStatsByFixtureIdAsync(int.Parse(fixture.fixtureIds[0]));
-				var playerStatsResponse = JsonConvert.DeserializeObject<PlayerStatResponse>(playerStatsJson);
-
-				foreach (var teamPlayerStats in playerStatsResponse.Response.Where(t => t.Team.Id == 64))
+				int fixtureId = int.Parse(fixture.fixtureIds[0]);
+				if (addedFixtureIds.Contains(fixtureId))
 				{
-					foreach (var playerStatDetail in teamPlayerStats.Players.Where(p => p.Statistics.Any() && p.Statistics[0].Games.Position != "G"))
+					FootballAPICalls footballAPICalls = new FootballAPICalls();
+					string playerStatsJson = await footballAPICalls.GetPlayerStatsByFixtureIdAsync(fixtureId);
+					var playerStatsResponse = JsonConvert.DeserializeObject<PlayerStatResponse>(playerStatsJson);
+
+					foreach (var teamPlayerStats in playerStatsResponse.Response.Where(t => t.Team.Id == 64))
 					{
-						ProcessPlayerStatsDetail(playerStatDetail, fixture, dbContext);
+						foreach (var playerStatDetail in teamPlayerStats.Players.Where(p => p.Statistics.Any() && p.Statistics[0].Games.Position != "G"))
+						{
+							ProcessPlayerStatsDetail(playerStatDetail, fixture, dbContext);
+						}
 					}
 				}
 			}
@@ -115,6 +122,7 @@ namespace MatchMasterWebAPI.ControllerServices
 				});
 			}
 		}
+
 
 		private Fixture CreateFixture(Fixtures fixture, string placeId, double temperature)
 		{
