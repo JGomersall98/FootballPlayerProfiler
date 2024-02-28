@@ -84,8 +84,8 @@ namespace MatchMasterWEB.ControllerServices
             var highTempFixtures = playerStats.OrderByDescending(ps => ps.Fixture.Temperature).Take(5).Select(ps => ps.Fixture);
             var lowTempFixtures = playerStats.OrderBy(ps => ps.Fixture.Temperature).Take(5).Select(ps => ps.Fixture);
 
-            double highTempAverageRating = CalculateAverageRating(highTempFixtures, playerStats);
-			double lowTempAverageRating = CalculateAverageRating(lowTempFixtures, playerStats);
+            double highTempAverageRating = CalculateAverageRatingFromTemp(highTempFixtures, playerStats);
+			double lowTempAverageRating = CalculateAverageRatingFromTemp(lowTempFixtures, playerStats);
 
 			double adaptabilityRating = (lowTempAverageRating < highTempAverageRating ? lowTempAverageRating / highTempAverageRating : highTempAverageRating / lowTempAverageRating) * 100;
             int adaptabilityRatingInt = (int)adaptabilityRating;
@@ -94,7 +94,7 @@ namespace MatchMasterWEB.ControllerServices
             return new DTO_AdaptabilityRating { AdaptabilityPercentage = adaptabilityRatingInt, TextColor = textColour };
         }
 
-        private double CalculateAverageRating(IEnumerable<Fixture> fixtures, PlayerStat[] playerStats)
+        private double CalculateAverageRatingFromTemp(IEnumerable<Fixture> fixtures, PlayerStat[] playerStats)
         {
 			double totalRating = fixtures
                 .Select(fixture => playerStats.FirstOrDefault(ps => ps.FixtureId == fixture.FixtureId)?.Rating)
