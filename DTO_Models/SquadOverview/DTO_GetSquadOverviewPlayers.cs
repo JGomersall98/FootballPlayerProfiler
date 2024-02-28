@@ -11,8 +11,6 @@
 		public string? PlayerPhoto { get; set; }
 		public DTO_PlayerRating? PlayerRating { get; set; }
 		public DTO_AdaptabilityRating? AdaptabilityPercentage { get; set; }
-/*		public double PlayerRating { get; set; }
-		public int AdaptabilityPercentage { get; set; }*/
 	}
 	public class DTO_PlayerRating
 	{
