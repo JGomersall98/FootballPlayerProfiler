@@ -27,8 +27,17 @@ namespace MatchMasterWebAPI.Controllers
 			// Pass the database context to the UpdateDatabaseAsync method
 			string result = await updateDatabaseControllerService.UpdateDatabaseAsync(_dbContext);
 
+			DTO_Tester dTO_Tester = new DTO_Tester
+			{
+				Test = result
+			};
+			Thread.Sleep(2000);
 			// Return the result
-			return Ok(result);
+			return Ok(dTO_Tester);
+		}
+		public class DTO_Tester
+		{
+			public string Test { get; set; }
 		}
 	}
 }

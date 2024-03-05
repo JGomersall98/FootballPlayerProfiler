@@ -30,7 +30,15 @@ namespace MatchMasterWebAPI.ControllerServices
 				await ProcessPlayerStatsAsync(fixtureDetails, addedFixtureIds, dbContext);
 
 				await dbContext.SaveChangesAsync();
-				return $"Success - Updated Database. Added {addedFixtureIds.Count} fixtures.";
+
+				if (addedFixtureIds.Any())
+				{
+					return $"Success - Updated Database. Added {addedFixtureIds.Count} fixtures.";
+				}
+				else
+				{
+					return "Success - Updated Database. No new fixtures added.";
+				}
 			}
 			catch (Exception ex)
 			{

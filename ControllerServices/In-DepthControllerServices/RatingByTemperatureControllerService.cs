@@ -63,6 +63,9 @@ namespace MatchMasterWEB.ControllerServices.In_DepthControllerServices
 			}
 			double averageRating = count > 0 ? totalRating / count : 0;
 
+			//Round AverageRating to 2 decimal places
+			averageRating = System.Math.Round(averageRating, 2);
+
 			//Return DTO with temperature range and average rating
 			return new DTO_DegreeRating
 			{
