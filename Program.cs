@@ -5,18 +5,15 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // --------------------------------- Cors -------------------------------------
-// Cors 
-var allowFrontendURL = "_originsForDevelopment";
-//Get the frontend development URL from appsettings.json
-string? frontendURL = builder.Configuration["DevelopmentFrontendURL"];
-
-// Add services to the container.
+var allowFrontendURL = "_allowSpecificOrigins";
+// Get the frontend URL from appsettings.json or use a sensible default
+string? frontendURL = builder.Configuration["FrontendURL"] ?? "http://localhost:3000";
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add CORS services and define the policy
+// Add CORS policy
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy(name: allowFrontendURL,
@@ -28,41 +25,26 @@ builder.Services.AddCors(options =>
 					  });
 });
 
-// Configuration
-IConfiguration configuration = builder.Configuration;
-
 // MySQL Connection
 builder.Services.AddDbContext<MatchMasterMySqlDatabaseContext>(options =>
-	options.UseMySql(configuration.GetConnectionString("MySQLConnection"), ServerVersion.Parse("8.0.25-mysql")));
+	options.UseMySql(builder.Configuration.GetConnectionString("MySQLConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MySQLConnection"))));
 
-// Register the endpoint services
+// Register services
 builder.Services.AddScoped<UpdateDatabaseControllerService>();
-
-// Configure Kestrel to listen on all interfaces
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-	serverOptions.ListenAnyIP(5000); // Listen for HTTP connections on port 5000
-									 // serverOptions.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps()); // Uncomment to listen for HTTPS connections
-});
 
 var app = builder.Build();
 
-//Apply cors if in development
-if (app.Environment.IsDevelopment())
-{
-	//Apply cors policy
-	Console.WriteLine("CORS policy applied: " + frontendURL);
-	app.UseCors(allowFrontendURL);
-}
+// CORS
+app.UseCors(allowFrontendURL);
 
-// Configure the HTTP request pipeline.
+// Swagger
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
