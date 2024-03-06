@@ -26,6 +26,7 @@ namespace MatchMasterWEB.ExternalAPICalls.Weather
 				response.EnsureSuccessStatusCode();
 				var body = await response.Content.ReadAsStringAsync();
 				string placeId = GetPlaceId(body);
+				Thread.Sleep(5000);
 				return placeId;
 			}
 		}
@@ -49,6 +50,7 @@ namespace MatchMasterWEB.ExternalAPICalls.Weather
 				using (var response = await client.SendAsync(request))
 				{
 					response.EnsureSuccessStatusCode();
+					Thread.Sleep(5000);
 					return await response.Content.ReadAsStringAsync();
 				}
 			}

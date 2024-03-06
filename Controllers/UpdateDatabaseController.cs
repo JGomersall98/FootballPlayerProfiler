@@ -31,7 +31,6 @@ namespace MatchMasterWebAPI.Controllers
 			{
 				Test = result
 			};
-			Thread.Sleep(2000);
 			// Return the result
 			return Ok(dTO_Tester);
 		}

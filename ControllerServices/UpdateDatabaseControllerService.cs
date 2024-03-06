@@ -15,7 +15,7 @@ namespace MatchMasterWebAPI.ControllerServices
 {
 	public class UpdateDatabaseControllerService
 	{
-		private readonly bool _useDummyData = true;
+		private readonly bool _useDummyData = false;
 		private readonly WeatherAPICalls _weatherAPICall = new WeatherAPICalls();
 
 		public async Task<string> UpdateDatabaseAsync(MatchMasterMySqlDatabaseContext dbContext)

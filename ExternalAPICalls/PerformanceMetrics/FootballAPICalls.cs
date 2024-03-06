@@ -29,7 +29,7 @@ namespace MatchMasterWEB.ExternalAPICalls.PerformanceMetrics
 				Console.WriteLine(body);
 				//Deserialize the response
 				FixtureResponse fixturesByLeagueIdObject = JsonConvert.DeserializeObject<FixturesByLeagueIdObject.FixtureResponse>(body);
-
+				Thread.Sleep(5000);
 				return fixturesByLeagueIdObject;
 			}
 			throw new NotImplementedException();
