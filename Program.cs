@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // --------------------------------- Cors -------------------------------------
-// Cors 
 var allowFrontendURL = "_originsForDevelopment";
 //Get the frontend development URL from appsettings.json
 string? frontendURL = builder.Configuration["DevelopmentFrontendURL"];
@@ -35,34 +34,9 @@ IConfiguration configuration = builder.Configuration;
 builder.Services.AddDbContext<MatchMasterMySqlDatabaseContext>(options =>
 	options.UseMySql(configuration.GetConnectionString("MySQLConnection"), ServerVersion.Parse("8.0.25-mysql")));
 
-// Register the endpoint services
-builder.Services.AddScoped<UpdateDatabaseControllerService>();
-
-// Configure Kestrel to listen on all interfaces
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-	serverOptions.ListenAnyIP(5000); // Listen for HTTP connections on port 5000
-									 // serverOptions.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps()); // Uncomment to listen for HTTPS connections
-});
-
 var app = builder.Build();
 
-//Apply cors if in development
-if (app.Environment.IsDevelopment())
-{
-	//Apply cors policy
-	Console.WriteLine("CORS policy applied: " + frontendURL);
-	app.UseCors(allowFrontendURL);
-}
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
-
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
