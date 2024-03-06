@@ -6,11 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // --------------------------------- Cors -------------------------------------
 var allowFrontendURL = "_originsForDevelopment";
-//Get the frontend development URL from appsettings.json
+// Get the frontend development URL from appsettings.json
 string? frontendURL = builder.Configuration["DevelopmentFrontendURL"];
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,17 +26,16 @@ builder.Services.AddCors(options =>
 					  });
 });
 
-// Configuration
-IConfiguration configuration = builder.Configuration;
-
-// MySQL Connection
-builder.Services.AddDbContext<MatchMasterMySqlDatabaseContext>(options =>
-	options.UseMySql(configuration.GetConnectionString("MySQLConnection"), ServerVersion.Parse("8.0.25-mysql")));
+// MySQL Connection and other service configurations...
 
 var app = builder.Build();
+
+// Use CORS policy
+app.UseCors(allowFrontendURL); // Make sure this is called BEFORE app.UseAuthorization() and app.MapControllers()
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
