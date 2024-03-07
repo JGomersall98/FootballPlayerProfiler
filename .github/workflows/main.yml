@@ -23,13 +23,13 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Restore
-        run: dotnet restore ./WebAPI/MatchMasterWEB/MatchMasterWEB.sln
+        run: dotnet restore ../WebAPI/MatchMasterWEB.sln
 
       - name: Build
-        run: dotnet build ./WebAPI/MatchMasterWEB/MatchMasterWEB.sln --configuration Release --no-restore
+        run: dotnet build ../WebAPI/MatchMasterWEB.sln --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ./WebAPI/MatchMasterWEB/MatchMasterWEB.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}' 
+        run: dotnet publish ../WebAPI/MatchMasterWEB.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}' 
 
       - name: Deployment
         uses: azure/webapps-deploy@v2
