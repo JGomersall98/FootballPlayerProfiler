@@ -11,7 +11,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: "./publish_output"
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
       - name: Build
         run: dotnet build ./WebAPI/MatchMasterWEB.csproj --configuration Release --no-restore
         
-jobs:
+
   test-deploy:
     runs-on: ubuntu-latest
 
