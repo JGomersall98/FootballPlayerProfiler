@@ -23,7 +23,7 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Restore
-        run: dotnet restore ./MatchMasterWEB.sln
+        run: dotnet restore MatchMasterWEB.sln
 
       - name: Build
         run: dotnet build ./MatchMasterWEB.sln --configuration Release --no-restore
