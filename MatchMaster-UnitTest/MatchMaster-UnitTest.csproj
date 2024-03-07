@@ -29,10 +29,6 @@
     <ProjectReference Include="..\WebAPI\MatchMasterWEB.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MockDatabaseConfiguration\" />
-  </ItemGroup>
-
 </Project>
 
 

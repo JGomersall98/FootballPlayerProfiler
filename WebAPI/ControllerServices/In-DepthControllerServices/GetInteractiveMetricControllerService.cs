@@ -9,17 +9,25 @@ namespace MatchMasterWEB.ControllerServices.In_DepthControllerServices
 	{
 		public DTO_GetPerformanceMetrics GetPerformanceMetrics(int playerId, int lowTemp, int highTemp, MatchMasterMySqlDatabaseContext dbContext)
 		{
+			//If highTemp is less than lowTemp throw exception
+			if (highTemp < lowTemp)
+				throw new System.ArgumentException("High temperature cannot be less than low temperature");
+
 			// Get PlayerStats from database from playerId
 			PlayerStat[] playerStats = dbContext.PlayerStats
 				.Include(ps => ps.Fixture)
 				.Where(ps => ps.PlayerId == playerId)
 				.ToArray();
 
+			// if no players found return empty DTO
+			if (playerStats == null)
+				return null!;
+
 			// Filter PlayersStats to only include rated fixtures
 			PlayerStat[] ratedPlayerStats = playerStats.Where(ps => ps.Rating > 0).ToArray();
 
 			// Filter RatedPlayerStats to only include fixtures with temperature between lowTemp and highTemp
-			PlayerStat[] filteredByTemperatureStats = ratedPlayerStats.Where(ps => ps.Fixture.Temperature >= lowTemp && ps.Fixture.Temperature <= highTemp).ToArray();
+			PlayerStat[] filteredByTemperatureStats = ratedPlayerStats.Where(ps => ps.Fixture!.Temperature >= lowTemp && ps.Fixture.Temperature <= highTemp).ToArray();
 
 			// if filteredPlayerStats is null return empty DTO
 			if (filteredByTemperatureStats == null)

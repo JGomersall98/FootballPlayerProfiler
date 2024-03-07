@@ -39,8 +39,8 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
             }
 
             // Assert
-            Assert.IsNotNull(caughtException); // Expected exception to be thrown
-            Assert.IsInstanceOfType(caughtException, typeof(ArgumentException)); // Expected exception to be of type ArgumentException
+            Assert.IsNotNull(caughtException);
+            Assert.IsInstanceOfType(caughtException, typeof(ArgumentException)); 
         }
         [TestMethod]
         public void GetSquadOverview_ValidPosition_ReturnsList()
@@ -53,8 +53,8 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
             var result = service.GetSquadOverview(position, _mockDatabase!);
 
             // Assert
-            Assert.IsNotNull(result); // Expected result to be not null
-            Assert.IsTrue(result!.Players!.Length > 0); // Expected at least one player
+            Assert.IsNotNull(result); 
+            Assert.IsTrue(result!.Players!.Length > 0); 
             Assert.AreEqual(result.Players[0].PlayerName, "TestPlayer");
         }
         [TestMethod]
@@ -68,8 +68,8 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
             var result = service.GetSquadOverview(position, _mockDatabase!);
 
             // Assert
-            Assert.IsNotNull(result); // Expected result to be not null
-            Assert.AreEqual(0, result.Players!.Length); // Expected no players
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Players!.Length); 
         }
         [TestMethod]
         public void GetSquadOverview_PlayersWithoutStats_ExcludedFromResults()
@@ -82,9 +82,8 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
             var result = service.GetSquadOverview(position, _mockDatabase!);
 
             // Assert
-            Assert.IsNotNull(result); // Expected result to be not null
-                                      // Assert 
-            Assert.AreEqual(0, result.Players!.Length); // Players without stats should be excluded
+            Assert.IsNotNull(result);                             
+            Assert.AreEqual(0, result.Players!.Length);
         }
         [TestMethod]
         public void GetSquadOverview_CaseInsensitivePosition_ReturnsList()
@@ -97,8 +96,8 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
             var result = service.GetSquadOverview(position, _mockDatabase!);
 
             // Assert
-            Assert.IsNotNull(result); // Expected result to be not null
-            Assert.IsTrue(result.Players!.Length > 0); // Expected at least one player
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Players!.Length > 0);
         }
         [TestMethod]
         public void GetSquadOverview_NullPosition_ThrowsArgumentException()
@@ -118,8 +117,8 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
             }
 
             // Assert
-            Assert.IsNotNull(caughtException); // Expected exception to be thrown
-            Assert.IsInstanceOfType(caughtException, typeof(NullReferenceException)); // Expected exception to be of type ArgumentException
+            Assert.IsNotNull(caughtException); 
+            Assert.IsInstanceOfType(caughtException, typeof(NullReferenceException));
         }
         [TestMethod]
         public void GetSquadOverview_PlayerRatingAdaptabilityAccuracy()
@@ -136,9 +135,7 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
 
             // Assert
             var testPlayer = result.Players!.FirstOrDefault(p => p.PlayerName == "AdaptabilityTestPlayer");
-            Assert.IsNotNull(testPlayer); // Expected result to be not null
-
-            // Assuming expected adaptability is 93% and rating is 7.85 for the test player
+            Assert.IsNotNull(testPlayer);
             Assert.AreEqual(93, testPlayer?.AdaptabilityPercentage?.AdaptabilityPercentage); 
             Assert.AreEqual(7.85, testPlayer?.PlayerRating?.PlayerRating);
         }
