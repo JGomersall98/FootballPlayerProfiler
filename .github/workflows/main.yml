@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         run: dotnet build ./WebAPI/MatchMasterWEB.csproj --configuration Release --no-restore
-
+          
       - name: Test
         run: dotnet test ./MatchMaster-UnitTest/MatchMaster-UnitTest.csproj
 
