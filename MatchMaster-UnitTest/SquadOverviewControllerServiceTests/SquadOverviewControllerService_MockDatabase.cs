@@ -15,7 +15,7 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
 
         public MatchMasterMySqlDatabaseContext GetMockDatabase()
         {
-            return _mockDatabase.GetContext();
+            return _mockDatabase!.GetContext();
         }
         public SquadOverviewControllerService_MockDatabase()
         {

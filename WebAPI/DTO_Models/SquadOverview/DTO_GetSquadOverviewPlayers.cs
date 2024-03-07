@@ -2,7 +2,7 @@
 {
 	public class DTO_GetSquadOverviewPlayers
 	{
-		public DTO_SquadOverviewPlayer[] Players { get; set; }
+		public DTO_SquadOverviewPlayer[]? Players { get; set; }
 	}
 	public class DTO_SquadOverviewPlayer
 	{

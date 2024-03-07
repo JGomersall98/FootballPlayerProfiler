@@ -54,7 +54,7 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
 
             // Assert
             Assert.IsNotNull(result); // Expected result to be not null
-            Assert.IsTrue(result.Players.Length > 0); // Expected at least one player
+            Assert.IsTrue(result!.Players!.Length > 0); // Expected at least one player
             Assert.AreEqual(result.Players[0].PlayerName, "TestPlayer");
         }
         [TestMethod]
@@ -69,7 +69,7 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
 
             // Assert
             Assert.IsNotNull(result); // Expected result to be not null
-            Assert.AreEqual(0, result.Players.Length); // Expected no players
+            Assert.AreEqual(0, result.Players!.Length); // Expected no players
         }
         [TestMethod]
         public void GetSquadOverview_PlayersWithoutStats_ExcludedFromResults()
@@ -84,7 +84,7 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
             // Assert
             Assert.IsNotNull(result); // Expected result to be not null
                                       // Assert 
-            Assert.AreEqual(0, result.Players.Length); // Players without stats should be excluded
+            Assert.AreEqual(0, result.Players!.Length); // Players without stats should be excluded
         }
         [TestMethod]
         public void GetSquadOverview_CaseInsensitivePosition_ReturnsList()
@@ -98,7 +98,7 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
 
             // Assert
             Assert.IsNotNull(result); // Expected result to be not null
-            Assert.IsTrue(result.Players.Length > 0); // Expected at least one player
+            Assert.IsTrue(result.Players!.Length > 0); // Expected at least one player
         }
         [TestMethod]
         public void GetSquadOverview_NullPosition_ThrowsArgumentException()
@@ -135,7 +135,7 @@ namespace MatchMaster_UnitTest.SquadOverviewControllerServiceTests
             var result = service.GetSquadOverview(position, _mockDatabase);
 
             // Assert
-            var testPlayer = result.Players.FirstOrDefault(p => p.PlayerName == "AdaptabilityTestPlayer");
+            var testPlayer = result.Players!.FirstOrDefault(p => p.PlayerName == "AdaptabilityTestPlayer");
             Assert.IsNotNull(testPlayer); // Expected result to be not null
 
             // Assuming expected adaptability is 93% and rating is 7.85 for the test player
