@@ -16,9 +16,9 @@ namespace MatchMasterWEB.ControllerServices.In_DepthControllerServices
 				.Where(p => p.PlayerId == playerId)
 				.FirstOrDefault();
 
-			//If player is null return empty DTO
+			//If player is throw exception
 			if (player == null)
-				return new DTO_DegreeRating[] { };
+				throw new System.ArgumentException("Player not found");
 
 			int[] lowTemps = new int[] { -20, 3, 10, 17 };
 			int[] highTemps = new int[] { 3, 10, 17, 50 };

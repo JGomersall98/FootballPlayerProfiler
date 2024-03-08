@@ -22,7 +22,7 @@ namespace MatchMaster_UnitTest.In_DepthControllerServiceTests
 			_mockDatabase = mockDatabase.GetMockDatabase();
 		}
 
-		// ----------------------------- GetPerformanceMetric Tests -----------------------------
+		// ----------------------------- GetInteractiveMetricControllerService Tests -----------------------------
 
 		[TestMethod]
 		public void GetPerformanceMetrics_UnknownPlayerId_ReturnsNull()
@@ -81,6 +81,159 @@ namespace MatchMaster_UnitTest.In_DepthControllerServiceTests
 			Assert.IsInstanceOfType(caughtException, typeof(ArgumentException));
 		}
 
-		// ----------------------------- GetStaticPerformanceMetric Tests -----------------------------
+		// ----------------------------- GetStaticMetricControllerService Tests -----------------------------
+		[TestMethod]
+		public void GetStaticPerformanceMetric_UnknownPlayerId_ReturnsNull()
+		{
+			// Arrange
+			var service = new GetStaticMetricControllerService();
+
+			// Act
+			int playerId = -0;
+			var result = service.GetStaticPerformanceMetric(playerId, _mockDatabase!);
+
+			// Assert		
+			Assert.IsNotNull(result);
+		}
+		[TestMethod]
+		public void GetStaticPerformanceMetric_CorrectCalculation_ReturnsExpectedMetrics()
+		{
+			// Arrange
+			var service = new GetStaticMetricControllerService();
+			int playerId = 1;
+
+			// Expected metrics		
+			int expectedDribblingRating = 50;
+			int expectedDuelsRating = 50;
+			int expectedDefendingRating = 40;
+			int expectedPassingRating = 80;
+			int expectedShootingRating = 60; 
+
+
+
+			// Act
+			var result = service.GetStaticPerformanceMetric(playerId, _mockDatabase!);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(expectedDribblingRating, result.DribblingRating);
+			Assert.AreEqual(expectedDuelsRating, result.DuelsRating);
+			Assert.AreEqual(expectedDefendingRating, result.DefendingRating);
+			Assert.AreEqual(expectedPassingRating, result.PassingRating);
+			Assert.AreEqual(expectedShootingRating, result.ShootingRating);		
+		}
+		[TestMethod]
+		public void GetStaticPerformanceMetric_NoRatedFixtures_ReturnsZeroMetrics()
+		{
+			// Arrange
+			var service = new GetStaticMetricControllerService();
+			int playerId = 2;
+
+			// Act
+			var result = service.GetStaticPerformanceMetric(playerId, _mockDatabase!);
+
+			// Assert
+			Assert.IsNotNull(result);			
+			Assert.AreEqual(0, result.DefendingRating);
+			Assert.AreEqual(0, result.DribblingRating);
+			Assert.AreEqual(0, result.DuelsRating);
+			Assert.AreEqual(0, result.PassingRating);
+			Assert.AreEqual(0, result.ShootingRating);
+		}
+
+		// ----------------------------- PlayerCardControllerService Tests -----------------------------
+		[TestMethod]
+		public void GetPlayerCard_UnknownPlayerId_ReturnsException()
+		{
+			// Arrange
+			var service = new PlayerCardControllerService();
+			Exception? caughtException = null;
+
+			// Act
+			int playerId = -0;
+			try
+			{
+				var result = service.GetPlayerCard(playerId, _mockDatabase!);
+			}
+			catch (Exception ex)
+			{
+				caughtException = ex;
+			}
+
+			// Assert
+			Assert.IsInstanceOfType(caughtException, typeof(ArgumentException));
+			Assert.AreEqual("Player not found", caughtException!.Message);
+		}
+		[TestMethod]
+		public void GetPlayerCard_ValidPlayerId_ReturnsExpectedPlayerDetails()
+		{
+			// Arrange
+			var service = new PlayerCardControllerService();
+			int validPlayerId = 1;
+
+			// Act
+			var result = service.GetPlayerCard(validPlayerId, _mockDatabase!);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual("TestPlayer", result.PlayerName);
+			Assert.AreEqual("TestPhoto", result.PlayerPhoto);
+		}
+		[TestMethod]
+		public void GetPlayerCard_PlayerWithNoStats_ReturnsDefaultRatingAndAdaptability()
+		{
+			// Arrange
+			var service = new PlayerCardControllerService();
+			int playerIdWithNoStats = 2;
+
+			// Act
+			var result = service.GetPlayerCard(playerIdWithNoStats, _mockDatabase!);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual("#808080", result.PlayerRating!.TextColor); 
+			Assert.AreEqual(0, result.AdaptabilityPercentage!.AdaptabilityPercentage);
+		}
+		[TestMethod]
+		public void GetPlayerCard_PlayerWithVaryingPerformance_ReturnsCorrectRatings()
+		{
+			// Arrange
+			var service = new PlayerCardControllerService();
+			int playerIdWithVaryingStats = 3;
+
+			// Act
+			var result = service.GetPlayerCard(playerIdWithVaryingStats, _mockDatabase!);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(7.85, result.PlayerRating!.PlayerRating); 
+			Assert.AreEqual("#6BBE00", result.PlayerRating!.TextColor);
+			Assert.AreEqual(93, result.AdaptabilityPercentage!.AdaptabilityPercentage); 
+			Assert.AreEqual("#008000", result.AdaptabilityPercentage!.TextColor);
+		}
+
+		// ----------------------------- RatingByTemperatureControllerService Tests -----------------------------
+		[TestMethod]
+		public void GetRatingByTemperature_UnknownPlayerId_ReturnsNull()
+		{
+			// Arrange
+			var service = new RatingByTemperatureControllerService();
+			var caughtException = new ArgumentException();
+			int playerId = -0;
+
+			// Act
+			try
+			{
+				var result = service.GetDegreeRatings(playerId, _mockDatabase!);
+			}
+			catch (Exception ex)
+			{
+				caughtException = ex as ArgumentException;
+			}			
+
+			// Assert		
+			Assert.IsInstanceOfType(caughtException, typeof(ArgumentException));
+			Assert.AreEqual("Player not found", caughtException!.Message);
+		}
 	}
 }

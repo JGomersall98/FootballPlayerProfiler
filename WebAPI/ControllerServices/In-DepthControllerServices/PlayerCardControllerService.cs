@@ -16,9 +16,9 @@ namespace MatchMasterWEB.ControllerServices.In_DepthControllerServices
 				.Where(p => p.PlayerId == playerId)
 				.FirstOrDefault();
 
-			//If player is null return empty DTO
+			//If player is null throw exception player not found
 			if (player == null)
-				return new DTO_SquadOverviewPlayer { };
+				throw new System.ArgumentException("Player not found");
 
 			GetPlayerAdaptabilityPercentage? _getPlayerAdaptabilityPercentage = new GetPlayerAdaptabilityPercentage();
 			GetPlayerAverageRating? _getPlayerAverageRating = new GetPlayerAverageRating();
