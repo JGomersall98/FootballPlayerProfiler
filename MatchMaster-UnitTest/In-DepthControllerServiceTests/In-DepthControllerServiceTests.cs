@@ -235,5 +235,76 @@ namespace MatchMaster_UnitTest.In_DepthControllerServiceTests
 			Assert.IsInstanceOfType(caughtException, typeof(ArgumentException));
 			Assert.AreEqual("Player not found", caughtException!.Message);
 		}
+		[TestMethod]
+		public void GetDegreeRatings_ValidPlayerId_CorrectlyCalculatesRatingsAndTextColors()
+		{
+			// Arrange
+			var service = new RatingByTemperatureControllerService();
+			int playerId = 3; 
+
+			// Act
+			var result = service.GetDegreeRatings(playerId, _mockDatabase!);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(4, result.Length, "Should return ratings for 4 temperature ranges.");
+
+			// Expected ratings and text colors
+			Assert.AreEqual(8, result[0].Rating);
+			Assert.AreEqual("#FFA500", result[0].TextColor);
+
+			Assert.AreEqual(7.75, result[1].Rating);
+			Assert.AreEqual("#6BBE00", result[1].TextColor);
+
+			Assert.AreEqual(8.25, result[2].Rating);
+			Assert.AreEqual("#008000", result[2].TextColor);
+
+			Assert.AreEqual(8.25, result[3].Rating);
+			Assert.AreEqual("#008000", result[3].TextColor);
+		}
+		[TestMethod]
+		public void GetDegreeRatings_NoStatsInTemperatureRange_ReturnsDefaultValues()
+		{
+			// Arrange
+			var service = new RatingByTemperatureControllerService();
+			int playerId = 2;
+
+			// Act
+			var result = service.GetDegreeRatings(playerId, _mockDatabase!);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(4, result.Length, "Should return ratings for 4 temperature ranges.");
+
+			Assert.AreEqual(0, result[0].Rating);
+			Assert.AreEqual("#FF0000", result[0].TextColor);
+
+			Assert.AreEqual(0, result[1].Rating);
+			Assert.AreEqual("#FF0000", result[1].TextColor);
+
+			Assert.AreEqual(0, result[2].Rating);
+			Assert.AreEqual("#FF0000", result[2].TextColor);
+
+			Assert.AreEqual(0, result[3].Rating);
+			Assert.AreEqual("#FF0000", result[3].TextColor);
+		}
+		[TestMethod]
+		public void GetDegreeRatings_ValidPlayerId_RatingsAreRoundedCorrectly()
+		{
+			// Arrange
+			var service = new RatingByTemperatureControllerService();
+			int playerId = 3;
+
+			// Act
+			var degreeRatings = service.GetDegreeRatings(playerId, _mockDatabase!);
+
+			// Assert
+			// Verify that each rating is rounded to 2 decimal places
+			foreach (var rating in degreeRatings)
+			{
+				double roundedRating = Math.Round(rating.Rating, 2);
+				Assert.AreEqual(roundedRating, rating.Rating);
+			}
+		}
 	}
 }
