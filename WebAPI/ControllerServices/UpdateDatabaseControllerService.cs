@@ -24,7 +24,7 @@ namespace MatchMasterWebAPI.ControllerServices
 			{
 				var fixtureDetails = _useDummyData ? GetDummyData() : await FetchFixtureDetails(dbContext);
 				if (fixtureDetails == null || fixtureDetails.fixtureDetails == null || !fixtureDetails.fixtureDetails.Any())
-					return "No fixture details available.";
+					return "No new fixture details available.";
 
 				var addedFixtureIds = await ProcessFixturesAsync(fixtureDetails, dbContext);
 				await ProcessPlayerStatsAsync(fixtureDetails, addedFixtureIds, dbContext);
